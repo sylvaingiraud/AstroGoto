@@ -1,7 +1,8 @@
 # AstroGoto
-// Goto with remote BT for Astronomical Equatorial stand.
-//
-// v1.0 - 07/2016 By Sylvain GIRAUD
+# Goto with remote BT for Astronomical Equatorial stand.
+
+
+# v1.0 - 07/2016 By Sylvain GIRAUD
 // For EQ5 Motor Drive stepper motors Tracking + Goto with remote command via Bluetooth.
 //    Asc Dte = AD = RA
 //    Dec = Declination
