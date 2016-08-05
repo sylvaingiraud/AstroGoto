@@ -35,6 +35,8 @@ v1.0 - 07/2016 By Sylvain GIRAUD
 
 // Fastest speed tested OK: 1 round (6000 steps, DOUBLE) in 12 seconds
 
+![Stand](https://github.com/sylvaingiraud/AstroGoto/blob/master/EQ5-Stand-GotoBT.jpg "Stand")
+
 ## Requires:
 
 // - Arduino Uno (tested R3 Rev3 ATmega328P CH340G)
