@@ -1,7 +1,7 @@
 // -*- mode: C++ -*-
 // Goto with remote BT for Astronomical Equatorial stand.
 //
-// v1.0 - 07/2016 By Sylvain GIRAUD
+// v1.01 - 07/2016 By Sylvain GIRAUD
 // For EQ5 Motor Drive stepper motors Tracking + Goto with remote command via Bluetooth.
 //    Asc Dte = AD = RA
 //    Dec = Declination
@@ -34,7 +34,8 @@
 
 // Minor issue 01: when getting serial data, motors freeze a short instant (~0.5 sec)
 // Minor issue 02: atfer goto, decelerate slowly (~0.25 sec) before stopping
-// Minor issue 03: changing tracking to goto start doing some positive steps (~80) even if goto is negative
+// Minor issue 03: changing tracking to goto start doing some positive steps (~80) even if goto is negative. 
+//                 FIXED. Was caused by useless stepperA.setSpeed.
 
 #include <AccelStepper12.h>
 #include <AFMotor.h>
@@ -81,11 +82,10 @@ bool inhibitTracking = false;
 //     On next negative move, compensation is added to the movement
 //     After any negative move (anti-clockwise), do positive steps (so that for any move, we are sure the previous move was always positive)
 //     (Assumption yet is that the same number of steps is used for both compensations)
-// flag for A anticlockwise goto, must be compensated with 760 steps before tracking works again;
-// + Include 80 steps to fix errouneous positive move before A goes anti clockwise (workaround for issue 03)
+// flag for A anticlockwise goto, must be compensated with 700 steps before tracking works again;
 // Set below number of steps to compensate mechanical lag
 // (steps)
-#define STEPSCOMPENSATEA 760
+#define STEPSCOMPENSATEA 700
 unsigned long StepsCompensateA = STEPSCOMPENSATEA;
 bool mustCompensateA = false;
 // same for D, compensate mechanical lag when direction change
@@ -258,10 +258,11 @@ void loop()
         {
         float incomingConsDeg = Serial.parseFloat();
         // Convert deg to steps using proper multiplier
+        // Positive deg do anticlockwise steps, and vice versa
         if (incomingConsDeg > 0 ) {
-          incomingConsA = steps360APos / 360 * incomingConsDeg;
+          incomingConsA = -(steps360APos / 360 * incomingConsDeg);
           } else {
-          incomingConsA = steps360ANeg / 360 * incomingConsDeg;
+          incomingConsA = -(steps360ANeg / 360 * incomingConsDeg);
           }
         // Compensate anticlockwise after goto
         if (incomingConsA < 0 ) {
@@ -277,7 +278,6 @@ void loop()
           }
         stopA();
         // Clockwise or Anticlockwise steps to go
-        stepperA.setSpeed(gotoSpeed);
         stepperA.move(incomingConsA);
         Serial.println("Moving Asc Dte");
         break;
@@ -299,7 +299,6 @@ void loop()
           }
         stopA();
         // Clockwise or Anticlockwise steps to go
-        stepperA.setSpeed(gotoSpeed);
         stepperA.move(incomingConsA);
         Serial.println("Moving Asc Dte");
         break;
@@ -310,10 +309,10 @@ void loop()
         float incomingConsDeg = Serial.parseFloat();
         // Convert deg to steps using proper multiplier
         if (incomingConsDeg > 0 ) {
-          incomingConsD = steps360DPos / 360 * incomingConsDeg;
+          incomingConsD = -(steps360DPos / 360 * incomingConsDeg);
           } else {
           // Compensate anticlockwise after goto
-          incomingConsD = steps360DNeg / 360 * incomingConsDeg;
+          incomingConsD = -(steps360DNeg / 360 * incomingConsDeg);
           }
         // Compensate anticlockwise after goto
         if (incomingConsD < 0 ) {
@@ -356,18 +355,26 @@ void loop()
       // H I J K : Fixed steps all 4 directions (for simple pad control)
       // Purely manual, compensation
       case 'H':
+        // Go East : Positive steps => will do Negative degs
         stopA();
         stepperA.move(padSteps);
         break;
       case 'I':
+        // Go West : Negative steps => will do Positive degs
         stopA();
-        stepperA.move(-padSteps);
+        // Compensate anticlockwise before and after goto
+        stepperA.move(-(padSteps + StepsCompensateA));
+        mustCompensateA = true;
         break;
       case 'J':
+        // Go Down : Positive steps => will do Negative degs
         stepperD.move(padSteps);
         break;
       case 'K':
-        stepperD.move(-padSteps);
+        // Go Up : Negative steps => will do Positive degs
+        // Compensate anticlockwise before and after goto
+        stepperD.move(-(padSteps + StepsCompensateD));
+        mustCompensateD = true;
         break;
 
       case 'Q':
@@ -396,9 +403,6 @@ void loop()
             StepsCompensateA = Serial.parseInt();
             break;
           case 'B':
-            StepsCompensateD = Serial.parseInt();
-            break;
-          case 'C':
             StepsCompensateD = Serial.parseInt();
             break;
           case 'D':
