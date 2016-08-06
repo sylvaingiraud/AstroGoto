@@ -2,7 +2,7 @@
 
 Goto with remote BT for Astronomical Equatorial stand.
 
-v1.0 - 07/2016 By Sylvain GIRAUD
+v1.01 - 08/2016 By Sylvain GIRAUD
 
 ## For EQ5 Motor Drive stepper motors Tracking + Goto with remote command via Bluetooth.
 
@@ -52,3 +52,9 @@ v1.0 - 07/2016 By Sylvain GIRAUD
 // - AFMotor library (https://github.com/adafruit/Adafruit-Motor-Shield-library)
 
 // - AccelStepper library v1.2 (https://github.com/adafruit/AccelStepper) (v1.2+ doesn't work, tested NOK with v1.51)
+
+## Tests:
+
+// Needs now a mobile App to generate BT commands using a star catalogue (help welcome)
+
+// Can be tested easily with great app [ArduinoRC](https://play.google.com/store/apps/details?id=eu.jahnestacado.arduinorc) (Android) 
