@@ -1,4 +1,4 @@
-// -*- mode: C++ -*-
+# AstroGoto
 // Very simple Goto with remote BT for Astronomical Equatorial stand.
 // Tested with EQ5 but should works on any stand with "4 cables" stepper motors.
 //
@@ -33,7 +33,7 @@
 
 ![Stand](https://github.com/sylvaingiraud/AstroGoto/blob/master/EQ5-Stand-GotoBT.jpg "Stand")
          
-// Requires only:
+## Requires only:
 // - Arduino Uno (tested R3 Rev3 ATmega328P CH340G)
 // - Adafruit Motor shield v1 with L293D
 // - Cable with RJ11 plug to EQ5 MD motors (4 pins)
@@ -44,7 +44,6 @@
 // - AccelStepper library v1.2 (https://github.com/adafruit/AccelStepper) (v1.2+ doesn't work, tested NOK with v1.51)
 // THIS ONE WORKS WITH AccelStepper 1.2. Issue "2nd moveTo goes 1 PPS only" is fixed (reset all: speed, accel,...etc).
 // FAILS WITH AccelStepper 1.51
-
 // Public domain!
 
 ## Tests:
