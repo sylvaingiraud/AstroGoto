@@ -1,8 +1,10 @@
 # AstroGoto
 // Very simple Goto with remote BT for Astronomical Equatorial stand.
+
 // Tested with EQ5 but should works on any stand with "4 cables" stepper motors.
-//
+
 // v1.02  - 07/2016 By Sylvain GIRAUD
+
 // v1.03  - 05/2017 By Sylvain GIRAUD - Added calibration with 2 stars.
 // For EQ5 Motor Drive stepper motors Tracking + Goto with remote command via Bluetooth.
 //    RA  = Asc Dte = AD
