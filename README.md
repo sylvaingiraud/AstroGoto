@@ -31,6 +31,8 @@
 //    Send An;Dn commands from an application with stars catalogue (currently using a spreadsheet + copy/paste)
 //    LX200 protocol !
 
+![Stand](https://github.com/sylvaingiraud/AstroGoto/blob/master/EQ5-Stand-GotoBT.jpg "Stand")
+         
 // Requires only:
 // - Arduino Uno (tested R3 Rev3 ATmega328P CH340G)
 // - Adafruit Motor shield v1 with L293D
